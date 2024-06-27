@@ -82,7 +82,7 @@ const TodoDataCard = ({ todo, index }) => {
                 border: "none", // Remove border
                 boxShadow: "none",
                 color:
-                  !todo.status || todo.status === "Pending"
+                  !todo?.status || todo?.status === "Pending"
                     ? ""
                     : "rgb(234 88 12)",
                 padding: 0,

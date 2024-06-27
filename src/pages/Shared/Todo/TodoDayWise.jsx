@@ -49,7 +49,11 @@ const TodoColumn = ({
       >
         {todos &&
           todos?.map((todo, index) => (
-            <Draggable key={todo?.id} draggableId={todo?.id} index={index}>
+            <Draggable
+              key={todo?.id}
+              draggableId={todo?.id.toString()}
+              index={index}
+            >
               {(provided, snapshot) => (
                 <div
                   ref={provided.innerRef}
@@ -95,21 +99,22 @@ const TodoDayWised = ({
   const [others, setOthers] = useState([]);
 
   useEffect(() => {
-    const ongoingDueToday = todos.filter((todo) => todo.status === "Ongoing");
-    const completedDueToday = todos.filter(
+    const sortedTodos = [...todos].sort((a, b) => b.id - a.id);
+    const ongoingDueToday = sortedTodos.filter(
+      (todo) => todo.status === "Ongoing"
+    );
+    const completedDueToday = sortedTodos.filter(
       (todo) => todo.status === "Completed"
     );
-    const othersDueToday = todos.filter(
+    const othersDueToday = sortedTodos.filter(
       (todo) => todo.status !== "Ongoing" && todo.status !== "Completed"
     );
 
     setOngoing(ongoingDueToday);
     setCompleted(completedDueToday);
     setOthers(othersDueToday);
-  }, [todos]); // Run the effect whenever todos change
-
+  }, [todos]);
   const handleDragEnd = async (result) => {
-    console.log(result);
     const { source, destination, draggableId } = result;
 
     if (!destination) return;
@@ -121,7 +126,7 @@ const TodoDayWised = ({
         source.droppableId === "completed") &&
       destination.droppableId === "alldayother"
     ) {
-      return; // Prevent dropping in "Allday" column
+      return;
     }
 
     if (source.droppableId === destination.droppableId) {
@@ -179,7 +184,7 @@ const TodoDayWised = ({
         destination.droppableId.charAt(0).toUpperCase() +
         destination.droppableId.slice(1);
 
-      // Save changes to the server
+      console.log(updatedMovedTodo);
       dispatch(
         updateTodoStatus({
           id: updatedMovedTodo.id,
@@ -187,9 +192,42 @@ const TodoDayWised = ({
         })
       );
     }
-
     setTodos(updatedTodos);
   };
+  // const handleDragEnd = async (result) => {
+  //   const { source, destination, draggableId } = result;
+
+  //   if (!destination) return;
+
+  //   const updatedTodos = Array.from(todos);
+  //   console.log(updatedTodos);
+  //   console.log(source);
+  //   let [reorderedItem] = updatedTodos.splice(source.index, 1);
+  //   console.log(reorderedItem);
+  //   updatedTodos.splice(destination.index, 0, reorderedItem);
+
+  //   console.log(reorderedItem);
+
+  //   if (source.droppableId !== destination.droppableId) {
+  //     const newStatus =
+  //       destination.droppableId === "alldayother"
+  //         ? "Other"
+  //         : destination.droppableId.charAt(0).toUpperCase() +
+  //           destination.droppableId.slice(1);
+  //     console.log(newStatus);
+  //     // reorderedItem.status = newStatus;
+
+  //     console.log(reorderedItem);
+  //     dispatch(
+  //       updateTodoStatus({
+  //         id: reorderedItem.id,
+  //         status: newStatus,
+  //       })
+  //     );
+  //   }
+
+  //   // setTodos(updatedTodos);
+  // };
 
   return (
     <div>
