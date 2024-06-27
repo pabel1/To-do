@@ -94,8 +94,10 @@ const TodoDataCard = ({ todo, index }) => {
           className={`space-y-1 ${todo?.status === "Completed" ? "ml-5" : ""}`}
         >
           {todo.title}
-
-          {<div className="text-xs">{todo.description}</div>}
+          <div className="flex items-center justify-between ">
+            {<div className="text-xs">{todo.description}</div>}
+            {<div className="text-[10px] self-end">#{todo.number}</div>}
+          </div>
         </div>
       </div>
       <div onClick={() => setSelectedTodo(todo.id)} className="my-auto">

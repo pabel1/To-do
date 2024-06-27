@@ -8,6 +8,7 @@ const todosSlice = createSlice({
     addTodo: (state, action) => {
       state.push({
         id: Date.now(),
+        number: state.length + 1,
         title: action.payload.title,
         description: action.payload.description,
         status: "Pending",
@@ -21,7 +22,14 @@ const todosSlice = createSlice({
       }
     },
     removeTodo: (state, action) => {
-      return state.filter((todo) => todo.id !== action.payload.id);
+      const index = state.findIndex((todo) => todo.id === action.payload.id);
+      if (index !== -1) {
+        state.splice(index, 1);
+        // Update numbering for remaining todos
+        for (let i = index; i < state.length; i++) {
+          state[i].number--;
+        }
+      }
     },
   },
 });
