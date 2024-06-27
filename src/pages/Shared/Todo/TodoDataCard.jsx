@@ -1,7 +1,9 @@
 import { Checkbox } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import TodoDropdownOptions from "../../../components/Buttons/TodoDropdownOptions";
 import DeleteTodoModal from "../../../components/Modals/DeleteTodoModal";
+import { removeTodo, updateTodoStatus } from "../../../feature/todo/todosSlice";
 
 const TodoDataCard = ({ todo, index }) => {
   const statusOptions = [
@@ -32,27 +34,28 @@ const TodoDataCard = ({ todo, index }) => {
     { title: "Delete", icon: "kfzfxczd" },
   ];
 
+  const dispatch = useDispatch();
   const [selectedTodo, setSelectedTodo] = useState("");
 
   const [selectedOption, setSelectedOption] = useState("");
 
   const handleCheckboxChange = async () => {
     const status = "Completed";
-    // const res = await updateTodoStatusApi({
-    //   token,
-    //   status,
-    //   id: todo?._id,
-    // });
-    // Update the todo status to "Completed"
-    // console.log(res);
+    dispatch(
+      updateTodoStatus({
+        id: todo.id,
+        status: status,
+      })
+    );
   };
 
   const handleDelete = async (id, text) => {
     if (text === "Delete") {
-      // const res = await deleteTodoApi({ token, id });
-      // if (res?.data?.success) {
-      //   toast.success("Todo Deleted Successfully");
-      // }
+      dispatch(
+        removeTodo({
+          id: id,
+        })
+      );
     } else return;
   };
 
@@ -107,7 +110,6 @@ const TodoDataCard = ({ todo, index }) => {
 
       {selectedOption === "Delete" && (
         <DeleteTodoModal
-          deleteLoading={deleteLoading}
           deleteTarget={"Todo"}
           setSelectedOption={setSelectedOption}
           selectedOption={selectedOption}

@@ -1,7 +1,7 @@
-import React from "react";
 import { Dialog, DialogContent } from "@mui/material";
-import Lordicon from "../../utiles/Lordicon";
+import React from "react";
 import { IoCloseOutline } from "react-icons/io5";
+import Lordicon from "../../utiles/Lordicon";
 
 const DeleteTodoModal = ({
   deleteMOpen,
@@ -70,7 +70,7 @@ const DeleteTodoModal = ({
                 ? "py-2 border-2 border-gray-200 rounded-lg bg-gray-200"
                 : `py-2  border-2 border-red-500 rounded-lg bg-red-500 text-white hover:bg-red-600 hover:border-red-600 transition duration-200`
             }
-            disabled={deleteLoading}
+            // disabled={deleteLoading}
           >
             {deleteLoading ? (
               <div class="border-gray-400 h-5 w-5 animate-spin rounded-full border-[3px] border-t-gray-600 mx-auto" />
