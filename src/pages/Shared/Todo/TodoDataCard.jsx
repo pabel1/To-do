@@ -6,6 +6,7 @@ import DeleteTodoModal from "../../../components/Modals/DeleteTodoModal";
 import { removeTodo, updateTodoStatus } from "../../../feature/todo/todosSlice";
 
 const TodoDataCard = ({ todo, index }) => {
+  console.log(todo);
   const statusOptions = [
     {
       id: 1,
@@ -93,14 +94,14 @@ const TodoDataCard = ({ todo, index }) => {
         <div
           className={`space-y-1 ${todo?.status === "Completed" ? "ml-5" : ""}`}
         >
-          {todo.title}
+          {todo?.title}
           <div className="flex items-center justify-between ">
-            {<div className="text-xs">{todo.description}</div>}
-            {<div className="text-[10px] self-end">#{todo.number}</div>}
+            {<div className="text-xs">{todo?.description}</div>}
+            {<div className="text-[10px] self-end">#{todo?.number}</div>}
           </div>
         </div>
       </div>
-      <div onClick={() => setSelectedTodo(todo.id)} className="my-auto">
+      <div onClick={() => setSelectedTodo(todo?.id)} className="my-auto">
         {selectedOption !== "Delete" && (
           <TodoDropdownOptions
             todo={todo}

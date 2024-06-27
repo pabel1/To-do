@@ -97,6 +97,7 @@ const TodoDayWised = ({
   const [ongoing, setOngoing] = useState([]);
   const [completed, setCompleted] = useState([]);
   const [others, setOthers] = useState([]);
+  const [updateTD, setUpdateTD] = useState(false);
 
   useEffect(() => {
     const sortedTodos = [...todos].sort((a, b) => b.id - a.id);
@@ -192,42 +193,8 @@ const TodoDayWised = ({
         })
       );
     }
-    setTodos(updatedTodos);
+    // setTodos(updatedTodos);
   };
-  // const handleDragEnd = async (result) => {
-  //   const { source, destination, draggableId } = result;
-
-  //   if (!destination) return;
-
-  //   const updatedTodos = Array.from(todos);
-  //   console.log(updatedTodos);
-  //   console.log(source);
-  //   let [reorderedItem] = updatedTodos.splice(source.index, 1);
-  //   console.log(reorderedItem);
-  //   updatedTodos.splice(destination.index, 0, reorderedItem);
-
-  //   console.log(reorderedItem);
-
-  //   if (source.droppableId !== destination.droppableId) {
-  //     const newStatus =
-  //       destination.droppableId === "alldayother"
-  //         ? "Other"
-  //         : destination.droppableId.charAt(0).toUpperCase() +
-  //           destination.droppableId.slice(1);
-  //     console.log(newStatus);
-  //     // reorderedItem.status = newStatus;
-
-  //     console.log(reorderedItem);
-  //     dispatch(
-  //       updateTodoStatus({
-  //         id: reorderedItem.id,
-  //         status: newStatus,
-  //       })
-  //     );
-  //   }
-
-  //   // setTodos(updatedTodos);
-  // };
 
   return (
     <div>
