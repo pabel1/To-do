@@ -1,0 +1,19 @@
+.semi-circle{
+  width: 320px;
+  height: 160px;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.semi-circle-progress{
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 320px;
+  height: 320px;
+  border: 30px solid;
+  border-color: #1CB854 #1CB854 rgb(199, 255, 225) rgb(199, 255, 225);
+  border-radius: 50%;
+}
