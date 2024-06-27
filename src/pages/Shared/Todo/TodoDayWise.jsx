@@ -6,6 +6,8 @@ import {
   HiOutlineDocumentChartBar,
   HiOutlineDocumentCheck,
 } from "react-icons/hi2";
+import { useDispatch } from "react-redux";
+import { updateTodoStatus } from "../../../feature/todo/todosSlice";
 import { scrollbar } from "../../../utiles/tailwindClasses";
 import TodoDataCard from "./TodoDataCard";
 
@@ -27,8 +29,6 @@ function getStyle(style, snapshot) {
     animation: animationClass,
   };
 }
-
-// "#8791e9 f7e6f9"
 
 const TodoColumn = ({
   droppableId,
@@ -89,6 +89,7 @@ const TodoDayWised = ({
   createTodoMOpen,
   setCreateTodoMOpen,
 }) => {
+  const dispatch = useDispatch();
   const [ongoing, setOngoing] = useState([]);
   const [completed, setCompleted] = useState([]);
   const [others, setOthers] = useState([]);
@@ -108,11 +109,12 @@ const TodoDayWised = ({
   }, [todos]); // Run the effect whenever todos change
 
   const handleDragEnd = async (result) => {
+    console.log(result);
     const { source, destination, draggableId } = result;
 
     if (!destination) return;
 
-    const movedTodo = todos.find((todo) => todo?._id === draggableId);
+    const movedTodo = todos.find((todo) => todo?.id === draggableId);
     const updatedTodos = [...todos];
     if (
       (source.droppableId === "ongoing" ||
@@ -178,17 +180,17 @@ const TodoDayWised = ({
         destination.droppableId.slice(1);
 
       // Save changes to the server
-      await updateTodoStatusApi({
-        token,
-        status: updatedMovedTodo.status,
-        id: updatedMovedTodo._id,
-      });
+      dispatch(
+        updateTodoStatus({
+          id: updatedMovedTodo.id,
+          status: updatedMovedTodo.status,
+        })
+      );
     }
 
     setTodos(updatedTodos);
   };
 
-  console.log(others);
   return (
     <div>
       <div className={`mt-10 grid grid-cols-1 lg:grid-cols-3 gap-7 `}>
