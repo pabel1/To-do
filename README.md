@@ -1,6 +1,37 @@
-# HRM - Human Resources Management System
+# use Makefile to build the project
 
-Welcome to the HRM project repository! This repository contains the frontend codebase for our HRM system, built using React with Vite and styled using Tailwind CSS.
+# Frontend build o run
+
+```bash
+make all-frontend
+
+```
+
+# Backend build o run
+
+```bash
+make all-backend
+```
+
+# Sob service build o run
+
+```bash
+make all
+```
+
+# Cleanup
+
+```bash
+make clean
+```
+
+# Custom configuration
+
+```bash
+make DOCKER_USERNAME=myuser FRONTEND_PORT=8080 all-frontend
+```
+
+# basic todo app
 
 ## Getting Started
 
@@ -42,6 +73,7 @@ The HRM project utilizes the following technologies:
 - **Material UI**: Styled component
 
 ## Important Package
+
 - Victory graph
 - Lordicon
 - React Schedule
