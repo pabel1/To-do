@@ -2,13 +2,13 @@
 # Global Variables
 DOCKER_USERNAME ?= pabel1
 PROJECT_VERSION ?= latest
-FRONTEND_DIR ?= ./frontend
+FRONTEND_DIR ?= .
 BACKEND_DIR ?= ./backend
 
 # Frontend Configuration
 FRONTEND_IMAGE_NAME ?= todo-app-frontend
 FRONTEND_CONTAINER_NAME ?= todo-app-front
-FRONTEND_PORT ?= 80
+FRONTEND_PORT ?= 3000
 
 # Backend Configuration
 BACKEND_IMAGE_NAME ?= todo-backend
@@ -44,71 +44,41 @@ push-frontend: tag-frontend
 .PHONY: run-frontend
 run-frontend: tag-frontend
 	@echo "$(GREEN)Running Frontend Docker Container...$(NC)"
-	@docker rm -f $(FRONTEND_CONTAINER_NAME) 2>/dev/null || true
+	@docker rm -f $(FRONTEND_CONTAINER_NAME) 2>/dev/null || echo "No existing container to remove"
 	docker run -d \
 		--name $(FRONTEND_CONTAINER_NAME) \
-		-p $(FRONTEND_PORT):80 \
+		-p $(FRONTEND_PORT):3000 \
 		$(DOCKER_USERNAME)/$(FRONTEND_IMAGE_NAME):$(PROJECT_VERSION)
 
-# Backend Targets
-.PHONY: build-backend
-build-backend:
-	@echo "$(GREEN)Building Backend Docker Image...$(NC)"
-	docker build \
-		--no-cache \
-		-t $(BACKEND_IMAGE_NAME):$(PROJECT_VERSION) \
-		-f $(BACKEND_DIR)/Dockerfile \
-		$(BACKEND_DIR)
+# run-frontend: tag-frontend
+# 	@echo "$(GREEN)Running Frontend Docker Container...$(NC)"
+# 	@docker rm -f $(FRONTEND_CONTAINER_NAME) 2>/dev/null || true
+# 	docker run -d \
+# 		--name $(FRONTEND_CONTAINER_NAME) \
+# 		-p $(FRONTEND_PORT):3000 \
+# 		$(DOCKER_USERNAME)/$(FRONTEND_IMAGE_NAME):$(PROJECT_VERSION)
 
-.PHONY: tag-backend
-tag-backend: build-backend
-	@echo "$(GREEN)Tagging Backend Docker Image...$(NC)"
-	docker tag \
-		$(BACKEND_IMAGE_NAME):$(PROJECT_VERSION) \
-		$(DOCKER_USERNAME)/$(BACKEND_IMAGE_NAME):$(PROJECT_VERSION)
 
-.PHONY: push-backend
-push-backend: tag-backend
-	@echo "$(GREEN)Pushing Backend Docker Image to Registry...$(NC)"
-	docker push $(DOCKER_USERNAME)/$(BACKEND_IMAGE_NAME):$(PROJECT_VERSION)
-
-.PHONY: run-backend
-run-backend: tag-backend
-	@echo "$(GREEN)Running Backend Docker Container...$(NC)"
-	@docker rm -f $(BACKEND_CONTAINER_NAME) 2>/dev/null || true
-	docker run -d \
-		--name $(BACKEND_CONTAINER_NAME) \
-		-p $(BACKEND_PORT):3000 \
-		$(DOCKER_USERNAME)/$(BACKEND_IMAGE_NAME):$(PROJECT_VERSION)
 
 # Composite Targets
 .PHONY: all-frontend
 all-frontend: build-frontend tag-frontend push-frontend run-frontend
 
-.PHONY: all-backend
-all-backend: build-backend tag-backend push-backend run-backend
+
 
 .PHONY: all
-all: all-frontend all-backend
+all: all-frontend
 
 
 # Cleanup Targets
 .PHONY: clean-frontend
 clean-frontend:
-	@echo "$(YELLOW)Cleaning Frontend Docker resources...$(NC)"
-	@docker rmi $(FRONTEND_IMAGE_NAME):$(PROJECT_VERSION) 2>/dev/null || true
-	@docker rmi $(DOCKER_USERNAME)/$(FRONTEND_IMAGE_NAME):$(PROJECT_VERSION) 2>/dev/null || true
-	@docker rm -f $(FRONTEND_CONTAINER_NAME) 2>/dev/null || true
+	Write-Host "Cleaning Frontend Docker resources..." -ForegroundColor Yellow
+	docker rmi $(FRONTEND_IMAGE_NAME):$(PROJECT_VERSION) 2>$null
+	docker rmi $(DOCKER_USERNAME)/$(FRONTEND_IMAGE_NAME):$(PROJECT_VERSION) 2>$null
+	docker rm -f $(FRONTEND_CONTAINER_NAME) 2>$null
 
-.PHONY: clean-backend
-clean-backend:
-	@echo "$(YELLOW)Cleaning Backend Docker resources...$(NC)"
-	@docker rmi $(BACKEND_IMAGE_NAME):$(PROJECT_VERSION) 2>/dev/null || true
-	@docker rmi $(DOCKER_USERNAME)/$(BACKEND_IMAGE_NAME):$(PROJECT_VERSION) 2>/dev/null || true
-	@docker rm -f $(BACKEND_CONTAINER_NAME) 2>/dev/null || true
 
-.PHONY: clean
-clean: clean-frontend clean-backend
 
 # Help Target for view  list  all available command 
 .PHONY: help
